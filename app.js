@@ -16,7 +16,7 @@ var auth = firebase.auth();
 var db = firebase.database();
 
 
-$("button").on("click", function (event) {
+$(".signup").on("click", function (event) {
 
     event.preventDefault();
 
@@ -47,4 +47,52 @@ $("button").on("click", function (event) {
 
     console.log(email, password)
 
-})
+});
+
+var provider = new firebase.auth.GoogleAuthProvider();
+
+$(".google").on("click", function googleSignin(event)  {
+    event.preventDefault();
+
+    auth
+        .signInWithPopup(provider).then(function(googleUser) {
+        var token = googleUser.credential.accessToken;
+        var user = googleUser.user;
+
+        console.log(googleUser)
+
+        var ref = db.ref("usersGoogle");
+
+        var data = {
+            email: googleUser.user.email,
+            id: googleUser.user.uid
+        };
+
+        ref.push(data)
+
+        console.log(token)
+        console.log(user)
+    }).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+
+        console.log(error.code)
+        console.log(error.message)
+    });
+
+
+
+    console.log("google sign in")
+});
+
+$(".googleout").on("click", function googleSignout(event)  {
+    event.preventDefault();
+    auth.signOut()
+
+        .then(function() {
+            console.log('Signout Succesfull')
+        }, function(error) {
+            console.log('Signout Failed')
+        });
+    console.log("google sign in")
+});
