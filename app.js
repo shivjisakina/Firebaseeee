@@ -15,6 +15,25 @@ var auth = firebase.auth();
 
 var db = firebase.database();
 
+// Facebook auth
+window.fbAsyncInit = function() {
+    FB.init({
+        appId      : '454886654904249',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v2.8'
+    });
+    FB.AppEvents.logPageView();
+};
+
+(function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
 
 $(".signup").on("click", function (event) {
 
@@ -95,4 +114,53 @@ $(".googleout").on("click", function googleSignout(event)  {
             console.log('Signout Failed')
         });
     console.log("google sign in")
+});
+
+// Facebook ================================================
+
+var providerfb = new firebase.auth.FacebookAuthProvider();
+
+
+$(".facebook").on("click", function facebookSignin(event)  {
+    event.preventDefault();
+    firebase.auth().signInWithPopup(providerfb)
+
+        .then(function(fbUser) {
+
+            var token = fbUser.credential.accessToken;
+            var user = fbUser.user;
+
+            console.log(fbUser)
+
+            var ref = db.ref("usersFacebook");
+
+            var data = {
+                name: fbUser.user.displayName,
+                email: fbUser.user.email,
+                id: fbUser.user.uid
+            };
+
+            ref.push(data)
+
+            console.log(token)
+            console.log(user)
+
+        }).catch(function(error) {
+
+        console.log(error.code);
+        console.log(error.message);
+    });
+    console.log("facebook sign in")
+});
+
+$(".facebookout").on("click", function facebookSignout(event)  {
+    event.preventDefault();
+    firebase.auth().signOut()
+
+        .then(function() {
+            console.log('Signout successful!')
+        }, function(error) {
+            console.log('Signout failed')
+        });
+    console.log("facebook sign in")
 });
