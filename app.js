@@ -10,3 +10,30 @@ var config = {
     messagingSenderId: "484303247887"
 };
 firebase.initializeApp(config);
+
+var auth = firebase.auth;
+
+$("button").on("click",function (event) {
+
+    event.preventDefault();
+
+    var email = $("#email").val().trim();
+    var password = $("#password").val().trim();
+
+    var user = firebase.auth().createUserWithEmailAndPassword(email, password);
+
+        user
+        .then(function (userCreated) {
+
+            console.log(userCreated)
+
+        })
+        .catch(function (err) {
+
+            console.log(err)
+
+        });
+
+    console.log(email, password)
+
+})
