@@ -1,0 +1,22 @@
+{
+  "name": "firebaseeee",
+  "version": "1.0.0",
+  "description": "Learning Firebase for tutoring, wish me luck ladies and gentlemen!",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivjisakina/Firebaseeee.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shivjisakina/Firebaseeee/issues"
+  },
+  "homepage": "https://github.com/shivjisakina/Firebaseeee#readme",
+  "dependencies": {
+    "firebase": "^4.3.0"
+  }
+}

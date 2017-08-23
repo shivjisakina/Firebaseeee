@@ -188,7 +188,7 @@ $(".github").on("click", function facebookSignout(event) {
     event.preventDefault();
     firebase.auth().signInWithPopup(providerGithub)
 
-        .then(function(githubUser) {
+        .then(function (githubUser) {
             var token = githubUser.credential.accessToken;
             var user = githubUser.user;
 
@@ -205,7 +205,7 @@ $(".github").on("click", function facebookSignout(event) {
 
             console.log(token)
             console.log(user)
-        }).catch(function(error) {
+        }).catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
 
@@ -219,10 +219,78 @@ $(".githubout").on("click", function facebookSignout(event) {
     event.preventDefault();
     firebase.auth().signOut()
 
-        .then(function() {
+        .then(function () {
             console.log('Signout successful!')
-        }, function(error) {
+        }, function (error) {
             console.log('Signout failed')
         });
     console.log("github sign out")
 });
+
+// ================================================
+// Creating Random Databases for practice
+// ================================================
+
+var playersRef = firebase.database().ref("players/");
+
+playersRef.set ({
+    John: {
+        number: 1,
+        age: 30
+    },
+
+    Amanda: {
+        number: 2,
+        age: 20
+    }
+});
+
+var foodRef = firebase.database().ref("food");
+
+foodRef.set({
+    breakfast: {
+        protein: "93 grams",
+        fats: "13 grams",
+        sodium: "10 grams"
+    },
+    lunch: {
+        protein: "43 grams",
+        fats: "93 grams",
+        sodium: "7 grams"
+    },
+    dinner: {
+        protein: "19 grams",
+        fats: "45 grams",
+        sodium: "6 grams"
+    }
+})
+
+$(".createElectronics").on("click", function facebookSignout(event) {
+    event.preventDefault();
+
+    var electronicsRef = firebase.database().ref("Electronics");
+
+    electronicsRef.set({
+        phone: "iphone 6s",
+        laptop: "Macbook pro 13 inch"
+    })
+
+    console.log("database created")
+});
+
+$(".createDrinks").on("click", function facebookSignout(event) {
+    event.preventDefault();
+
+    var drinksRef = firebase.database().ref("Drinks");
+
+    var drink = $("#drink").val().trim();
+    var brand = $("#brand").val().trim();
+
+    drinksRef.set({
+        drink: drink,
+        brand: brand
+    })
+
+    console.log("database created")
+});
+
