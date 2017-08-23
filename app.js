@@ -11,27 +11,38 @@ var config = {
 };
 firebase.initializeApp(config);
 
-var auth = firebase.auth;
+var auth = firebase.auth();
 
-$("button").on("click",function (event) {
+var db = firebase.database();
+
+
+$("button").on("click", function (event) {
 
     event.preventDefault();
 
     var email = $("#email").val().trim();
     var password = $("#password").val().trim();
 
-    var user = firebase.auth().createUserWithEmailAndPassword(email, password);
+    var user = auth.createUserWithEmailAndPassword(email, password);
 
-        user
+    user
         .then(function (userCreated) {
-
             console.log(userCreated)
+            console.log("new user created")
+
+            var ref = db.ref("users");
+
+            var data = {
+                email: userCreated.email,
+                id: userCreated.uid
+            };
+
+            ref.push(data)
 
         })
         .catch(function (err) {
-
-            console.log(err)
-
+            alert(err.message)
+            console.log("There was an error, try again")
         });
 
     console.log(email, password)
