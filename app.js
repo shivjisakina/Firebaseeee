@@ -16,23 +16,30 @@ var auth = firebase.auth();
 var db = firebase.database();
 
 // Facebook auth
-window.fbAsyncInit = function() {
+window.fbAsyncInit = function () {
     FB.init({
-        appId      : '454886654904249',
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v2.8'
+        appId: '454886654904249',
+        cookie: true,
+        xfbml: true,
+        version: 'v2.8'
     });
     FB.AppEvents.logPageView();
 };
 
-(function(d, s, id){
+(function (d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
+    if (d.getElementById(id)) {
+        return;
+    }
+    js = d.createElement(s);
+    js.id = id;
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
+
+// ================================================
+// User signup
+// ================================================
 
 
 $(".signup").on("click", function (event) {
@@ -68,13 +75,17 @@ $(".signup").on("click", function (event) {
 
 });
 
+// ================================================
+// Google
+// ================================================
+
 var provider = new firebase.auth.GoogleAuthProvider();
 
-$(".google").on("click", function googleSignin(event)  {
+$(".google").on("click", function googleSignin(event) {
     event.preventDefault();
 
     auth
-        .signInWithPopup(provider).then(function(googleUser) {
+        .signInWithPopup(provider).then(function (googleUser) {
         var token = googleUser.credential.accessToken;
         var user = googleUser.user;
 
@@ -91,7 +102,7 @@ $(".google").on("click", function googleSignin(event)  {
 
         console.log(token)
         console.log(user)
-    }).catch(function(error) {
+    }).catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
 
@@ -100,32 +111,33 @@ $(".google").on("click", function googleSignin(event)  {
     });
 
 
-
     console.log("google sign in")
 });
 
-$(".googleout").on("click", function googleSignout(event)  {
+$(".googleout").on("click", function googleSignout(event) {
     event.preventDefault();
     auth.signOut()
 
-        .then(function() {
+        .then(function () {
             console.log('Signout Succesfull')
-        }, function(error) {
+        }, function (error) {
             console.log('Signout Failed')
         });
     console.log("google sign in")
 });
 
-// Facebook ================================================
+// ================================================
+// Facebook
+// ================================================
 
 var providerfb = new firebase.auth.FacebookAuthProvider();
 
 
-$(".facebook").on("click", function facebookSignin(event)  {
+$(".facebook").on("click", function facebookSignin(event) {
     event.preventDefault();
     firebase.auth().signInWithPopup(providerfb)
 
-        .then(function(fbUser) {
+        .then(function (fbUser) {
 
             var token = fbUser.credential.accessToken;
             var user = fbUser.user;
@@ -145,7 +157,7 @@ $(".facebook").on("click", function facebookSignin(event)  {
             console.log(token)
             console.log(user)
 
-        }).catch(function(error) {
+        }).catch(function (error) {
 
         console.log(error.code);
         console.log(error.message);
@@ -153,7 +165,57 @@ $(".facebook").on("click", function facebookSignin(event)  {
     console.log("facebook sign in")
 });
 
-$(".facebookout").on("click", function facebookSignout(event)  {
+$(".facebookout").on("click", function facebookSignout(event) {
+    event.preventDefault();
+    firebase.auth().signOut()
+
+        .then(function () {
+            console.log('Signout successful!')
+        }, function (error) {
+            console.log('Signout failed')
+        });
+    console.log("facebook sign in")
+});
+
+// ================================================
+// Github
+// ================================================
+
+var providerGithub = new firebase.auth.GithubAuthProvider();
+
+
+$(".github").on("click", function facebookSignout(event) {
+    event.preventDefault();
+    firebase.auth().signInWithPopup(providerGithub)
+
+        .then(function(githubUser) {
+            var token = githubUser.credential.accessToken;
+            var user = githubUser.user;
+
+            console.log(githubUser)
+
+            var ref = db.ref("usersGithub");
+
+            var data = {
+                name: githubUser.user.displayName,
+                id: githubUser.user.uid
+            };
+
+            ref.push(data)
+
+            console.log(token)
+            console.log(user)
+        }).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+
+        console.log(error.code)
+        console.log(error.message)
+    });
+    console.log("github sign in")
+});
+
+$(".githubout").on("click", function facebookSignout(event) {
     event.preventDefault();
     firebase.auth().signOut()
 
@@ -162,5 +224,5 @@ $(".facebookout").on("click", function facebookSignout(event)  {
         }, function(error) {
             console.log('Signout failed')
         });
-    console.log("facebook sign in")
+    console.log("github sign out")
 });
